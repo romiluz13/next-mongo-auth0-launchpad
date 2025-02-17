@@ -167,11 +167,80 @@ docker-compose up
 
 ## 📚 Documentation
 
-- [Getting Started](https://github.com/romiluz13/ai-devs-launchpad/wiki/Getting-Started)
-- [Authentication](https://github.com/romiluz13/ai-devs-launchpad/wiki/Authentication)
-- [Database](https://github.com/romiluz13/ai-devs-launchpad/wiki/Database)
-- [Deployment](https://github.com/romiluz13/ai-devs-launchpad/wiki/Deployment)
-- [Testing](https://github.com/romiluz13/ai-devs-launchpad/wiki/Testing)
+### Getting Started
+1. **Prerequisites**:
+   - Node.js >= 18
+   - MongoDB Atlas account
+   - Auth0 account
+
+2. **Initial Setup**:
+   ```bash
+   # Clone and install
+   git clone https://github.com/romiluz13/ai-devs-launchpad.git
+   cd ai-devs-launchpad
+   npm install
+
+   # Environment setup
+   cp .env.example .env.local
+   # Follow the instructions in .env.example
+   ```
+
+3. **Configuration**:
+   - Set up Auth0:
+     1. Create new application in Auth0 Dashboard
+     2. Choose "Regular Web Application"
+     3. Add `http://localhost:3000/api/auth/callback` to Allowed Callback URLs
+     4. Add `http://localhost:3000` to Allowed Logout URLs
+     5. Copy credentials to `.env.local`
+
+   - Set up MongoDB:
+     1. Create cluster in MongoDB Atlas
+     2. Get connection string
+     3. Add to `.env.local`
+
+### Authentication
+- Uses Auth0 for secure authentication
+- Supports social providers (Google, GitHub, etc.)
+- Protected API routes and pages
+- Automatic token handling
+- Session management
+
+### Database
+- MongoDB with Mongoose
+- Auto-generated TypeScript types
+- Built-in models:
+  - User
+  - Team
+  - API Keys
+- Connection pooling
+- Automatic timestamps
+
+### Deployment
+1. **Standard Deployment**:
+   ```bash
+   npm run build
+   npm start
+   ```
+
+2. **Docker Deployment**:
+   ```bash
+   # Build image
+   docker build -t ai-devs-launchpad .
+
+   # Run container
+   docker run -p 3000:3000 ai-devs-launchpad
+   ```
+
+3. **Environment Variables**:
+   - Copy `.env.example` to `.env.local`
+   - Update with production values
+   - Ensure HTTPS in production
+
+### Testing
+- Unit Tests: `npm test`
+- Coverage: `npm run test:coverage`
+- E2E Tests: Coming soon
+- Test utilities included
 
 ## 📝 License
 

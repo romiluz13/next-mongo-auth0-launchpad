@@ -29,8 +29,8 @@ AI Developer's Launch Pad is your foundation for building modern web application
 
 ```bash
 # Clone the repository
-git clone https://github.com/romiluz13/ai-devs-launchpad.git
-cd ai-devs-launchpad
+git clone https://github.com/romiluz13/next-mongo-auth0-launchpad.git
+cd next-mongo-auth0-launchpad
 
 # Install dependencies
 npm install
@@ -176,8 +176,8 @@ docker-compose up
 2. **Initial Setup**:
    ```bash
    # Clone and install
-   git clone https://github.com/romiluz13/ai-devs-launchpad.git
-   cd ai-devs-launchpad
+   git clone https://github.com/romiluz13/next-mongo-auth0-launchpad.git
+   cd next-mongo-auth0-launchpad
    npm install
 
    # Environment setup

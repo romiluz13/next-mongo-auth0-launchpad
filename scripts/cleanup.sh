@@ -8,75 +8,89 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}🧹 Cleaning up project structure...${NC}"
 
-# Create essential directories
+# Step 1: Create Essential Directories
+# These are the core directories that EVERY project needs, regardless of use case
 echo -e "\n${GREEN}Creating essential directories...${NC}"
-mkdir -p src/components/layout
-mkdir -p src/components/ui
-mkdir -p src/lib/models
-mkdir -p src/styles
+mkdir -p src/components/layout    # For layout components (Nav, Sidebar)
+mkdir -p src/components/ui        # For core UI components
+mkdir -p src/lib/models          # For database models
+mkdir -p src/styles              # For global styles
 
-# Function to show directory structure
-show_structure() {
-  if command -v tree &> /dev/null; then
-    tree src
-  else
-    if command -v ls &> /dev/null; then
-      ls -R src
-    else
-      echo "Unable to show directory structure"
-    fi
-  fi
-}
-
-# Remove unnecessary UI components if they exist
+# Step 2: Remove Optional UI Components
+# These are example or specialized components that not every project needs
 echo -e "\n${GREEN}Removing unnecessary UI components...${NC}"
-rm -f src/components/ui/calendar.tsx
-rm -f src/components/ui/navigation-menu.tsx
-rm -f src/components/ui/breadcrumb.tsx
-rm -f src/components/ui/pagination.tsx
-rm -f src/components/ui/dropdown-menu.tsx
-rm -f src/components/ui/accordion.tsx
-rm -f src/components/ui/alert.tsx
-rm -f src/components/ui/avatar.tsx
-rm -f src/components/ui/badge.tsx
-rm -f src/components/ui/checkbox.tsx
-rm -f src/components/ui/dialog.tsx
-rm -f src/components/ui/form.tsx
-rm -f src/components/ui/input.tsx
-rm -f src/components/ui/label.tsx
-rm -f src/components/ui/menubar.tsx
-rm -f src/components/ui/popover.tsx
-rm -f src/components/ui/progress.tsx
-rm -f src/components/ui/radio-group.tsx
-rm -f src/components/ui/scroll-area.tsx
-rm -f src/components/ui/select.tsx
-rm -f src/components/ui/separator.tsx
-rm -f src/components/ui/sheet.tsx
-rm -f src/components/ui/skeleton.tsx
-rm -f src/components/ui/slider.tsx
-rm -f src/components/ui/switch.tsx
-rm -f src/components/ui/table.tsx
-rm -f src/components/ui/tabs.tsx
-rm -f src/components/ui/textarea.tsx
-rm -f src/components/ui/toast.tsx
-rm -f src/components/ui/toggle.tsx
-rm -f src/components/ui/tooltip.tsx
+OPTIONAL_COMPONENTS=(
+    "calendar.tsx"        # Specialized: Only needed for scheduling apps
+    "navigation-menu.tsx" # Example: Shows navigation patterns
+    "breadcrumb.tsx"     # Optional: Not all apps need breadcrumbs
+    "pagination.tsx"     # Optional: For listing pages
+    "dropdown-menu.tsx"  # Example: Shows dropdown patterns
+    "accordion.tsx"      # Specialized: For FAQ/documentation
+    "alert.tsx"         # Example: Shows notification patterns
+    "avatar.tsx"        # Optional: For user profiles
+    "badge.tsx"         # Optional: For notifications/labels
+    "checkbox.tsx"      # Example: Form component
+    "dialog.tsx"        # Example: Modal patterns
+    "form.tsx"          # Example: Form handling
+    "input.tsx"         # Example: Form component
+    "label.tsx"         # Example: Form component
+    "menubar.tsx"       # Specialized: For complex menus
+    "popover.tsx"       # Example: Shows tooltip patterns
+    "progress.tsx"      # Optional: For loading states
+    "radio-group.tsx"   # Example: Form component
+    "scroll-area.tsx"   # Specialized: For custom scrolling
+    "select.tsx"        # Example: Form component
+    "separator.tsx"     # Optional: For visual dividers
+    "sheet.tsx"         # Specialized: For side panels
+    "skeleton.tsx"      # Example: Loading states
+    "slider.tsx"        # Specialized: For range inputs
+    "switch.tsx"        # Example: Toggle component
+    "table.tsx"         # Example: Data display
+    "tabs.tsx"          # Example: Navigation pattern
+    "textarea.tsx"      # Example: Form component
+    "toast.tsx"         # Example: Notification system
+    "toggle.tsx"        # Example: Button variant
+    "tooltip.tsx"       # Example: Help text
+)
 
-# Move files to proper locations
+# Remove each optional component if it exists
+for component in "${OPTIONAL_COMPONENTS[@]}"; do
+    rm -f "src/components/ui/$component"
+done
+
+# Step 3: Keep Essential UI Components
+# These components are kept because they're fundamental to most web apps:
+# - Button.tsx        # Every app needs buttons
+# - Card.tsx         # Basic content container
+# - ErrorBoundary.tsx # Error handling is essential
+# - LoadingSpinner.tsx # Loading states are essential
+
+# Step 4: Organize Layout Components
+# Move layout components to their proper location
 echo -e "\n${GREEN}Organizing files...${NC}"
-mv src/components/nav.tsx src/components/layout/Nav.tsx
-mv src/components/dashboard/sidebar.tsx src/components/layout/Sidebar.tsx
+# These moves might fail if files are already in the right place, that's OK
+mv src/components/nav.tsx src/components/layout/Nav.tsx 2>/dev/null || true
+mv src/components/dashboard/sidebar.tsx src/components/layout/Sidebar.tsx 2>/dev/null || true
 
-# Update imports in layout.tsx
+# Step 5: Update Import Paths
+# Update references to moved components
 echo -e "\n${GREEN}Updating imports...${NC}"
-sed -i '' 's|@/components/nav|@/components/layout/Nav|g' src/app/layout.tsx
+# This might fail if files are already updated, that's OK
+sed -i '' 's|@/components/nav|@/components/layout/Nav|g' src/app/layout.tsx 2>/dev/null || true
 
-# Remove empty directories
+# Step 6: Clean Up Empty Directories
+# Remove any empty directories left after reorganization
 echo -e "\n${GREEN}Cleaning up empty directories...${NC}"
 find src -type d -empty -delete
 
+# Step 7: Show Final Structure
 echo -e "\n${BLUE}✨ Project structure cleaned up successfully!${NC}"
 echo -e "Project structure is now organized as follows:"
 echo -e "${GREEN}"
-show_structure
+# Show directory structure using tree if available, otherwise use ls
+if command -v tree &> /dev/null; then
+    tree src
+else
+    ls -R src
+fi
 echo -e "${NC}" 

@@ -102,7 +102,7 @@ src/
 │   └── (auth)/           # Auth-related pages
 ├── components/            # React components
 │   ├── ui/               # Reusable UI components
-│   └── features/         # Feature-specific components
+│   └── layout/           # Layout components
 ├── lib/                  # Utilities and models
 │   ├── models/          # Mongoose models
 │   └── utils/           # Helper functions
@@ -167,11 +167,11 @@ docker-compose up
 
 ## 📚 Documentation
 
-- [Getting Started](docs/getting-started.md)
-- [Authentication](docs/authentication.md)
-- [Database](docs/database.md)
-- [Deployment](docs/deployment.md)
-- [Testing](docs/testing.md)
+- [Getting Started](https://github.com/romiluz13/ai-devs-launchpad/wiki/Getting-Started)
+- [Authentication](https://github.com/romiluz13/ai-devs-launchpad/wiki/Authentication)
+- [Database](https://github.com/romiluz13/ai-devs-launchpad/wiki/Database)
+- [Deployment](https://github.com/romiluz13/ai-devs-launchpad/wiki/Deployment)
+- [Testing](https://github.com/romiluz13/ai-devs-launchpad/wiki/Testing)
 
 ## 📝 License
 

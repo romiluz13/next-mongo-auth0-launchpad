@@ -511,138 +511,166 @@ export function DataComponent() {
 
 # AI Developer's Launch Pad Development Rules
 
-## Core Architecture Rules
+## Project Structure Rules
 
-1. **Authentication (Auth0)**:
-   ```typescript
-   // ✓ CORRECT: Protected API route with Auth0
-   import { getSession } from '@auth0/nextjs-auth0';
-   
-   export async function GET() {
-     const session = await getSession();
-     if (!session?.user) {
-       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-     }
-     // ... rest of the code
-   }
-   
-   // ✗ INCORRECT: Unprotected sensitive route
-   export async function GET() {
-     // Missing authentication check
-     const data = await fetchSensitiveData();
-     return NextResponse.json(data);
-   }
-   ```
-
-2. **Database (MongoDB)**:
-   ```typescript
-   // ✓ CORRECT: MongoDB connection with error handling
-   import mongoose from 'mongoose';
-   
-   try {
-     await mongoose.connect(process.env.MONGODB_URI!);
-     const data = await YourModel.find({});
-   } catch (error) {
-     console.error('Database error:', error);
-     throw new Error('Failed to connect to database');
-   }
-   
-   // ✗ INCORRECT: Missing error handling
-   const data = await YourModel.find({});
-   ```
-
-3. **API Security**:
-   ```typescript
-   // ✓ CORRECT: API route with rate limiting and validation
-   import { rateLimit } from '@/lib/rate-limit';
-   import { z } from 'zod';
-   
-   const schema = z.object({
-     name: z.string().min(1),
-     email: z.string().email(),
-   });
-   
-   export async function POST(req: Request) {
-     const limiter = await rateLimit(req);
-     if (!limiter.success) {
-       return NextResponse.json(
-         { error: 'Too many requests' },
-         { status: 429 }
-       );
-     }
-     
-     const body = await req.json();
-     const result = schema.safeParse(body);
-     if (!result.success) {
-       return NextResponse.json(
-         { error: 'Invalid input' },
-         { status: 400 }
-       );
-     }
-   }
-   ```
-
-## File Structure Rules
-
-1. **Component Organization**:
+1. **Directory Organization**:
    ```
    src/
    ├── app/                    # Next.js App Router pages
    │   ├── api/               # API routes
-   │   ├── (auth)/           # Auth-related routes
-   │   └── dashboard/        # Protected dashboard routes
+   │   │   ├── auth/         # Auth0 routes
+   │   │   ├── user/         # User management
+   │   │   ├── team/         # Team management
+   │   │   └── keys/         # API key management
+   │   ├── dashboard/        # Dashboard pages
+   │   └── (auth)/          # Auth-related routes
    ├── components/
    │   ├── ui/              # Reusable UI components
    │   └── layout/          # Layout components
    ├── lib/
    │   ├── models/         # Mongoose models
-   │   └── utils/          # Utility functions
+   │   └── utils/          # Helper functions
    └── styles/             # Global styles
    ```
 
-2. **Naming Conventions**:
-   - Files: kebab-case (e.g., `api-key.ts`)
-   - Components: PascalCase (e.g., `ApiKeyForm.tsx`)
-   - Utilities: camelCase (e.g., `formatDate.ts`)
-   - Models: PascalCase (e.g., `User.ts`)
-
-## Component Rules
-
-1. **Client Components**:
+2. **File Naming**:
    ```typescript
-   // ✓ CORRECT: Client component with proper setup
+   // ✓ CORRECT
+   src/components/ui/Button.tsx        // UI components: PascalCase
+   src/lib/utils/formatDate.ts         // Utilities: camelCase
+   src/lib/models/User.ts              // Models: PascalCase
+   src/app/api/auth/login/route.ts     // API routes: kebab-case directories
+
+   // ✗ INCORRECT
+   src/components/ui/button.tsx        // Wrong: lowercase
+   src/lib/utils/format_date.ts        // Wrong: snake_case
+   src/lib/models/user.model.ts        // Wrong: .model suffix
+   ```
+
+3. **Component Organization**:
+   ```typescript
+   // ✓ CORRECT: Client Component
    'use client';
    
-   import { useUser } from '@auth0/nextjs-auth0/client';
-   import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
+   import { useState } from 'react';
+   import { Button } from '@/components/ui/Button';
    
-   export function DashboardComponent() {
-     const { user, isLoading } = useUser();
-   
-     if (isLoading) return <LoadingSpinner />;
-   
+   export function UserProfile() {
+     const [isEditing, setIsEditing] = useState(false);
      return (
-       <ErrorBoundary>
-         <div>{user?.name}</div>
-       </ErrorBoundary>
+       <div className="space-y-4">
+         <h2 className="text-2xl font-bold">Profile</h2>
+         <Button onClick={() => setIsEditing(!isEditing)}>
+           {isEditing ? 'Save' : 'Edit'}
+         </Button>
+       </div>
      );
+   }
+
+   // ✓ CORRECT: Server Component
+   import { headers } from 'next/headers';
+   import { UserProfile } from '@/components/UserProfile';
+   
+   export default async function ProfilePage() {
+     const data = await fetchUserData();
+     return <UserProfile initialData={data} />;
    }
    ```
 
-2. **Server Components**:
+## Authentication Rules
+
+1. **Auth0 Integration**:
    ```typescript
-   // ✓ CORRECT: Server component with async data
-   import { headers } from 'next/headers';
+   // ✓ CORRECT: Protected API Route
+   import { getSession } from '@auth0/nextjs-auth0';
    
-   export default async function ServerComponent() {
-     const data = await fetchData();
+   export async function GET() {
+     const session = await getSession();
+     if (!session?.user) {
+       return NextResponse.json(
+         { error: 'Unauthorized' },
+         { status: 401 }
+       );
+     }
+     // ... rest of the code
+   }
+
+   // ✓ CORRECT: Protected Component
+   'use client';
    
-     return (
-       <div>
-         {data.map(item => (
-           <div key={item.id}>{item.name}</div>
-         ))}
-       </div>
+   import { useUser } from '@auth0/nextjs-auth0/client';
+   
+   export function ProtectedComponent() {
+     const { user, isLoading } = useUser();
+     
+     if (isLoading) return <LoadingSpinner />;
+     if (!user) return null;
+     
+     return <div>Protected Content</div>;
+   }
+   ```
+
+2. **Session Management**:
+   ```typescript
+   // ✓ CORRECT: Session Handling
+   import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+   
+   export default withPageAuthRequired(async function Page() {
+     return <ProtectedContent />;
+   });
+   ```
+
+## Database Rules
+
+1. **MongoDB Models**:
+   ```typescript
+   // ✓ CORRECT: Mongoose Model
+   import mongoose from 'mongoose';
+   
+   const UserSchema = new mongoose.Schema({
+     auth0Id: {
+       type: String,
+       required: true,
+       unique: true,
+     },
+     email: {
+       type: String,
+       required: true,
+       unique: true,
+     },
+     name: String,
+     createdAt: {
+       type: Date,
+       default: Date.now,
+     },
+   }, {
+     timestamps: true,
+   });
+   
+   export const User = mongoose.models.User || 
+     mongoose.model('User', UserSchema);
+   ```
+
+2. **Database Operations**:
+   ```typescript
+   // ✓ CORRECT: Database Query
+   try {
+     await connectDB();
+     const user = await User.findOne({ email })
+       .select('-password')
+       .lean();
+     
+     if (!user) {
+       return NextResponse.json(
+         { error: 'User not found' },
+         { status: 404 }
+       );
+     }
+   } catch (error) {
+     console.error('Database error:', error);
+     return NextResponse.json(
+       { error: 'Database error' },
+       { status: 500 }
      );
    }
    ```
@@ -651,23 +679,137 @@ export function DataComponent() {
 
 1. **Route Structure**:
    ```typescript
-   // ✓ CORRECT: API route organization
-   src/app/api/
-   ├── auth/
-   │   └── [...auth0]/route.ts    # Auth0 routes
-   ├── user/
-   │   └── route.ts               # User management
-   ├── team/
-   │   └── route.ts               # Team management
-   └── keys/
-       ├── route.ts               # List keys
-       └── generate/route.ts      # Generate key
+   // ✓ CORRECT: API Route
+   export async function GET(
+     req: Request,
+     { params }: { params: { id: string } }
+   ) {
+     try {
+       // Validation
+       if (!params.id) {
+         return NextResponse.json(
+           { error: 'ID is required' },
+           { status: 400 }
+         );
+       }
+       
+       // Auth check
+       const session = await getSession();
+       if (!session?.user) {
+         return NextResponse.json(
+           { error: 'Unauthorized' },
+           { status: 401 }
+         );
+       }
+       
+       // Rate limiting
+       const limiter = await rateLimit(req);
+       if (!limiter.success) {
+         return NextResponse.json(
+           { error: 'Too many requests' },
+           { status: 429 }
+         );
+       }
+       
+       // Database operation
+       const data = await fetchData(params.id);
+       
+       return NextResponse.json(data);
+     } catch (error) {
+       console.error('API error:', error);
+       return NextResponse.json(
+         { error: 'Internal server error' },
+         { status: 500 }
+       );
+     }
+   }
    ```
 
-2. **Error Handling**:
+## UI Component Rules
+
+1. **Component Structure**:
    ```typescript
-   // ✓ CORRECT: Proper error handling
+   // ✓ CORRECT: UI Component
+   interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+     variant?: 'primary' | 'secondary' | 'danger';
+     size?: 'sm' | 'md' | 'lg';
+     isLoading?: boolean;
+   }
+   
+   export function Button({
+     variant = 'primary',
+     size = 'md',
+     isLoading,
+     children,
+     className,
+     ...props
+   }: ButtonProps) {
+     return (
+       <button
+         className={cn(
+           buttonVariants({ variant, size }),
+           className
+         )}
+         disabled={isLoading}
+         {...props}
+       >
+         {isLoading ? <LoadingSpinner /> : children}
+       </button>
+     );
+   }
+   ```
+
+## Testing Rules
+
+1. **Component Tests**:
+   ```typescript
+   // ✓ CORRECT: Component Test
+   import { render, screen } from '@testing-library/react';
+   import userEvent from '@testing-library/user-event';
+   
+   describe('Component', () => {
+     it('renders correctly', () => {
+       render(<Component />);
+       expect(screen.getByRole('button')).toBeInTheDocument();
+     });
+     
+     it('handles user interaction', async () => {
+       render(<Component />);
+       await userEvent.click(screen.getByRole('button'));
+       expect(screen.getByText('Clicked')).toBeInTheDocument();
+     });
+   });
+   ```
+
+## Error Handling Rules
+
+1. **Client-side Errors**:
+   ```typescript
+   // ✓ CORRECT: Error Handling
    try {
+     const response = await fetch('/api/data');
+     if (!response.ok) {
+       throw new Error('Failed to fetch data');
+     }
+     const data = await response.json();
+   } catch (error) {
+     console.error('Error:', error);
+     toast.error('Failed to load data');
+   }
+   ```
+
+2. **Server-side Errors**:
+   ```typescript
+   // ✓ CORRECT: API Error Handling
+   try {
+     const session = await getSession();
+     if (!session?.user) {
+       return NextResponse.json(
+         { error: 'Unauthorized' },
+         { status: 401 }
+       );
+     }
+     
      const data = await processRequest();
      return NextResponse.json(data);
    } catch (error) {
@@ -679,129 +821,48 @@ export function DataComponent() {
    }
    ```
 
-## Security Rules
-
-1. **Environment Variables**:
-   ```typescript
-   // ✓ CORRECT: Environment variable usage
-   const mongoUri = process.env.MONGODB_URI;
-   if (!mongoUri) {
-     throw new Error('MONGODB_URI is not defined');
-   }
-   
-   // ✗ INCORRECT: Exposing sensitive data
-   const apiKey = process.env.API_KEY;
-   console.log('API Key:', apiKey);
-   ```
-
-2. **API Protection**:
-   ```typescript
-   // ✓ CORRECT: Protected route with rate limiting
-   export async function POST(req: Request) {
-     const limiter = await rateLimit(req);
-     if (!limiter.success) {
-       return NextResponse.json(
-         { error: 'Too many requests' },
-         { status: 429 }
-       );
-     }
-     // ... rest of the code
-   }
-   ```
-
-## Testing Rules
-
-1. **Component Testing**:
-   ```typescript
-   // ✓ CORRECT: Component test
-   describe('Component', () => {
-     it('renders correctly', () => {
-       render(<Component />);
-       expect(screen.getByText('Expected Text')).toBeInTheDocument();
-     });
-   
-     it('handles user interaction', async () => {
-       render(<Component />);
-       await userEvent.click(screen.getByRole('button'));
-       expect(screen.getByText('Success')).toBeInTheDocument();
-     });
-   });
-   ```
-
-2. **API Testing**:
-   ```typescript
-   // ✓ CORRECT: API route test
-   describe('API Route', () => {
-     it('handles valid request', async () => {
-       const response = await fetch('/api/endpoint', {
-         method: 'POST',
-         body: JSON.stringify({ data: 'test' }),
-       });
-       expect(response.status).toBe(200);
-     });
-   
-     it('handles invalid request', async () => {
-       const response = await fetch('/api/endpoint');
-       expect(response.status).toBe(400);
-     });
-   });
-   ```
-
 ## Performance Rules
 
 1. **Data Fetching**:
    ```typescript
-   // ✓ CORRECT: Optimized data fetching
-   const { data, error } = useSWR('/api/data', fetcher, {
-     revalidateOnFocus: false,
-     dedupingInterval: 60000,
-   });
+   // ✓ CORRECT: Optimized Data Fetching
+   const { data, error } = useSWR(
+     user ? `/api/data/${user.id}` : null,
+     fetcher,
+     {
+       revalidateOnFocus: false,
+       dedupingInterval: 60000,
+       errorRetryCount: 3,
+     }
+   );
    ```
 
 2. **Component Optimization**:
    ```typescript
-   // ✓ CORRECT: Optimized rendering
-   const MemoizedComponent = memo(function Component({ data }) {
-     return <div>{data.map(item => (
-       <Item key={item.id} {...item} />
-     ))}</div>;
+   // ✓ CORRECT: Memoized Component
+   const MemoizedComponent = memo(function Component({
+     data,
+     onAction,
+   }: Props) {
+     return (
+       <div>
+         {data.map((item) => (
+           <Item
+             key={item.id}
+             {...item}
+             onClick={() => onAction(item.id)}
+           />
+         ))}
+       </div>
+     );
    });
    ```
 
-## Documentation Rules
-
-1. **Component Documentation**:
-   ```typescript
-   /**
-    * @component ApiKeyForm
-    * @description Form for generating new API keys
-    * @example
-    * <ApiKeyForm onSubmit={(key) => console.log(key)} />
-    */
-   export function ApiKeyForm({ onSubmit }: ApiKeyFormProps) {
-     // ... implementation
-   }
-   ```
-
-2. **API Documentation**:
-   ```typescript
-   /**
-    * @api {post} /api/keys/generate Generate API Key
-    * @apiName GenerateApiKey
-    * @apiGroup Keys
-    * @apiParam {String} name Key name
-    * @apiSuccess {String} key Generated API key
-    * @apiError {Object} error Error object
-    */
-   export async function POST(req: Request) {
-     // ... implementation
-   }
-   ```
-
 Remember:
-- ALWAYS use TypeScript for type safety
-- ALWAYS implement proper error handling
+- ALWAYS use TypeScript with proper types
+- ALWAYS handle loading and error states
 - ALWAYS protect sensitive routes
+- ALWAYS validate user input
 - NEVER expose sensitive information
-- NEVER skip input validation
+- NEVER skip error handling
 - NEVER trust client-side data

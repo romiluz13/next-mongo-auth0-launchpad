@@ -37,10 +37,11 @@ npm install
 
 # Set up your environment variables
 cp .env.example .env.local
-# Edit .env.local and add your:
-# - MongoDB URI
-# - Auth0 credentials
-# - Other configuration
+# The .env.example file contains detailed instructions for:
+# - Setting up Auth0 (authentication)
+# - Setting up MongoDB (database)
+# - Optional configurations
+# Follow the instructions in the file to get your credentials
 
 # Verify your setup (these will help you check your configuration)
 npm run verify:mongodb  # Check MongoDB connection

@@ -38,19 +38,33 @@ export default function DashboardPage() {
   const [newKeyName, setNewKeyName] = useState('');
   const [showNewKeyModal, setShowNewKeyModal] = useState(false);
   const [newKey, setNewKey] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       // Fetch user data and stats
       Promise.all([
-        fetch('/api/user').then(res => res.json()),
-        fetch('/api/dashboard/stats').then(res => res.json()),
-        fetch('/api/keys').then(res => res.json())
+        fetch('/api/user').then(res => {
+          if (!res.ok) throw new Error('Failed to fetch user data');
+          return res.json();
+        }),
+        fetch('/api/dashboard/stats').then(res => {
+          if (!res.ok) throw new Error('Failed to fetch stats');
+          return res.json();
+        }),
+        fetch('/api/keys').then(res => {
+          if (!res.ok) throw new Error('Failed to fetch API keys');
+          return res.json();
+        })
       ]).then(([userData, stats, keys]) => {
         setUserData(userData);
         setDbStats(stats);
-        setApiKeys(keys);
-      }).catch(error => console.error('Error fetching dashboard data:', error));
+        setApiKeys(Array.isArray(keys) ? keys : []);
+        setError(null);
+      }).catch(error => {
+        console.error('Error fetching dashboard data:', error);
+        setError(error.message);
+      });
     }
   }, [user]);
 
@@ -64,13 +78,20 @@ export default function DashboardPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newKeyName })
       });
+      
+      if (!res.ok) {
+        throw new Error('Failed to generate API key');
+      }
+      
       const data = await res.json();
       setNewKey(data.key);
       setApiKeys(prev => [...prev, { key: data.key, name: newKeyName, createdAt: new Date().toISOString() }]);
       setNewKeyName('');
       setShowNewKeyModal(false);
+      setError(null);
     } catch (error) {
       console.error('Error generating API key:', error);
+      setError(error.message);
     } finally {
       setIsGeneratingKey(false);
     }
@@ -80,6 +101,17 @@ export default function DashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-red-500 bg-red-50 dark:bg-red-900/10 p-4 rounded-lg">
+          <h2 className="text-lg font-semibold">Error</h2>
+          <p>{error}</p>
+        </div>
       </div>
     );
   }
@@ -136,12 +168,16 @@ export default function DashboardPage() {
             </button>
           </div>
           <div className="space-y-2">
-            {apiKeys.map((key, index) => (
-              <div key={index} className="text-sm p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
-                <div className="font-medium text-gray-900 dark:text-white">{key.name}</div>
-                <div className="text-gray-500 dark:text-gray-400">Created: {new Date(key.createdAt).toLocaleDateString()}</div>
-              </div>
-            ))}
+            {apiKeys.length === 0 ? (
+              <p className="text-sm text-gray-500 dark:text-gray-400">No API keys found. Create your first key!</p>
+            ) : (
+              apiKeys.map((key, index) => (
+                <div key={index} className="text-sm p-2 bg-gray-50 dark:bg-gray-700 rounded-md">
+                  <div className="font-medium text-gray-900 dark:text-white">{key.name}</div>
+                  <div className="text-gray-500 dark:text-gray-400">Created: {new Date(key.createdAt).toLocaleDateString()}</div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 

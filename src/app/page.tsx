@@ -26,11 +26,17 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center relative overflow-hidden bg-gradient-to-b from-black to-gray-900">
-      {/* MongoDB-inspired gradient background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,237,100,0.1),transparent_70%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(1,158,67,0.05),transparent_70%)]" />
-      
-      <div className="container relative z-10 mx-auto px-4 md:px-6 py-12">
+      {/* Fixed header */}
+      <div className="w-full text-center fixed top-0 left-0 p-4 bg-black/90 backdrop-blur-sm z-50">
+        <h1 className="text-2xl md:text-3xl font-bold">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
+            AI Developer's Launch Pad
+          </span>
+        </h1>
+      </div>
+
+      {/* Main content with top margin to prevent overlap */}
+      <div className="container relative z-10 mx-auto px-4 md:px-6 py-12 mt-16">
         <div className="flex flex-col items-center space-y-12 text-center">
           {/* Main Heading Section */}
           <div className="space-y-6 max-w-4xl">

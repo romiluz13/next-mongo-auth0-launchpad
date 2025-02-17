@@ -125,7 +125,7 @@ export default function Home() {
           {/* Footer Links */}
           <div className="flex flex-col sm:flex-row gap-4 text-center">
             <a
-              href="https://github.com/yourusername/ai-devs-launchpad"
+              href="https://github.com/romiluz13/ai-devs-launchpad"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-md border border-gray-800 px-6 py-3 text-sm font-medium text-gray-300 transition-colors hover:bg-gray-800 hover:border-gray-700"
@@ -136,7 +136,7 @@ export default function Home() {
               View on GitHub
             </a>
             <a
-              href="/docs"
+              href="https://github.com/romiluz13/ai-devs-launchpad#readme"
               className="inline-flex items-center justify-center rounded-md bg-white/5 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10"
             >
               Documentation

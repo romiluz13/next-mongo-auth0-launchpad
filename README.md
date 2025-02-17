@@ -42,13 +42,12 @@ cp .env.example .env.local
 # - Auth0 credentials
 # - Other configuration
 
-# Verify your setup
-npx tsx scripts/verify-mongodb.ts  # Check MongoDB connection
-npx tsx scripts/verify-auth0.ts    # Check Auth0 configuration
+# Verify your setup (these will help you check your configuration)
+npm run verify:mongodb  # Check MongoDB connection
+npm run verify:auth0   # Check Auth0 configuration
 
 # Clean up template files (optional)
-chmod +x scripts/cleanup.sh
-./scripts/cleanup.sh
+npm run cleanup
 
 # Start the development server
 npm run dev

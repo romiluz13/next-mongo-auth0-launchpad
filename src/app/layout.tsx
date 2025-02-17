@@ -9,6 +9,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'AI Developer\'s Launch Pad',
   description: 'Your launchpad for AI-powered development',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({

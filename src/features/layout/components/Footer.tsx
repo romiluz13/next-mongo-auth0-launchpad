@@ -19,6 +19,16 @@ export function Footer() {
               A production-ready template for modern web applications, featuring MongoDB integration, 
               authentication, and a responsive UI.
             </p>
+            <p className="mt-2 text-sm font-medium text-mongodb-green">
+              Created for <a 
+                href="https://israai.club" 
+                className="underline hover:text-white transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                israai.club
+              </a> - Israel's first AI coders social network
+            </p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
             <div>
@@ -62,12 +72,22 @@ export function Footer() {
               <ul className="text-mongodb-gray-300 font-medium">
                 <li className="mb-4">
                   <a 
-                    href="https://github.com" 
+                    href="https://github.com/romiluz13/next-mongo-auth0-launchpad" 
                     className="hover:text-mongodb-green transition-colors"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     GitHub
+                  </a>
+                </li>
+                <li className="mb-4">
+                  <a 
+                    href="https://israai.club" 
+                    className="hover:text-mongodb-green transition-colors"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    israai.club
                   </a>
                 </li>
                 <li>
@@ -87,11 +107,18 @@ export function Footer() {
         <hr className="my-6 border-mongodb-dark-400 sm:mx-auto lg:my-8" />
         <div className="sm:flex sm:items-center sm:justify-between">
           <span className="text-sm text-mongodb-gray-400 sm:text-center">
-            © {new Date().getFullYear()} MongoDB Developer's Launch Pad. All Rights Reserved.
+            © {new Date().getFullYear()} MongoDB Developer's Launch Pad. All Rights Reserved. Powered by <a 
+                href="https://israai.club" 
+                className="text-mongodb-green hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                israai.club
+              </a>
           </span>
           <div className="flex mt-4 space-x-5 sm:justify-center sm:mt-0">
             <a
-              href="https://github.com"
+              href="https://github.com/romiluz13/next-mongo-auth0-launchpad"
               className="text-mongodb-gray-400 hover:text-mongodb-green transition-colors"
               target="_blank"
               rel="noopener noreferrer"

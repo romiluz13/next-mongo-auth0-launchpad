@@ -1,40 +1,47 @@
-import { handleAuth } from '@auth0/nextjs-auth0';
+/**
+ * Auth0 Token Refresh API Route
+ * 
+ * This route handler refreshes the user's Auth0 token when it's about to expire.
+ */
+
+import { handleAuth, handleCallback } from '@auth0/nextjs-auth0';
 import { NextRequest, NextResponse } from 'next/server';
+import { Session } from '@auth0/nextjs-auth0';
 import { logger } from '@/lib/logger';
-import { getSession } from '@auth0/nextjs-auth0';
 
 /**
- * This endpoint handles token refreshing for Auth0
- * It redirects to the login endpoint with a returnTo parameter
+ * GET /api/auth/refresh
+ * 
+ * Handles Auth0 token refresh
  */
 export async function GET(req: NextRequest) {
   try {
-    logger.info('Token refresh requested');
+    // Get the return URL from query params
+    const { searchParams } = new URL(req.url);
+    const returnTo = searchParams.get('returnTo') || '/';
     
-    // Check if user is authenticated
-    const session = await getSession();
+    // Handle Auth0 refresh using the official SDK
+    const handler = handleAuth({
+      callback: handleCallback({
+        afterCallback: (_req: any, _res: any, session: Session) => {
+          logger.info('Token refreshed successfully');
+          return session;
+        },
+      })
+    });
     
-    if (!session) {
-      logger.warn('No session found during token refresh');
-      return NextResponse.redirect(new URL('/api/auth/login', req.url));
-    }
-    
-    // Get the return URL
-    const returnTo = req.nextUrl.searchParams.get('returnTo') || '/dashboard';
-    
-    // Redirect to login with returnTo parameter
-    // Auth0 will handle the token refresh during the authentication flow
-    const loginUrl = new URL('/api/auth/login', req.url);
-    loginUrl.searchParams.set('returnTo', returnTo);
-    
-    logger.info(`Redirecting to Auth0 login for token refresh, will return to: ${returnTo}`);
-    
-    return NextResponse.redirect(loginUrl);
+    return handler(req as any);
   } catch (error) {
-    logger.error('Error in refresh token route:', error);
+    logger.error('Error refreshing token:', error);
     
     // Redirect to login on error
-    return NextResponse.redirect(new URL('/api/auth/login', req.url));
+    const { searchParams } = new URL(req.url);
+    const returnPath = searchParams.get('returnTo') || '/';
+    
+    const loginUrl = new URL('/api/auth/login', req.nextUrl.origin);
+    loginUrl.searchParams.set('returnTo', returnPath);
+    
+    return NextResponse.redirect(loginUrl);
   }
 }
 

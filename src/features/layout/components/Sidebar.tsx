@@ -34,7 +34,7 @@ export function Sidebar() {
       <div className="flex items-center justify-between p-4 border-b border-mongodb-dark-400">
         {!collapsed && (
           <div className="flex items-center">
-            <MongoDBLogo className="text-white" width={100} height={26} />
+            <MongoDBLogo width={35} height={35} />
           </div>
         )}
         <button 

@@ -1,4 +1,10 @@
-// Learn more: https://github.com/testing-library/jest-dom
+/**
+ * Jest Setup
+ * 
+ * This file sets up the testing environment for Jest.
+ */
+
+// Import Jest DOM extensions
 import '@testing-library/jest-dom';
 
 // Mock crypto for Auth0
@@ -12,43 +18,113 @@ const cryptoMock = {
 };
 global.crypto = cryptoMock;
 
+// Mock Next.js router
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    prefetch: jest.fn(),
+    back: jest.fn(),
+    pathname: '/',
+    query: {},
+  }),
+}));
+
 // Mock next/navigation
 jest.mock('next/navigation', () => ({
-  useRouter() {
-    return {
-      push: jest.fn(),
-      replace: jest.fn(),
-      prefetch: jest.fn(),
-      back: jest.fn(),
-      forward: jest.fn(),
-      refresh: jest.fn(),
-      pathname: '/',
-    };
-  },
-  useSearchParams() {
-    return new URLSearchParams();
-  },
-  usePathname() {
-    return '/';
-  },
+  useRouter: () => ({
+    push: jest.fn(),
+    replace: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    prefetch: jest.fn(),
+  }),
+  usePathname: () => '/',
+  useSearchParams: () => new URLSearchParams(),
 }));
 
 // Mock Auth0
-jest.mock('@auth0/nextjs-auth0/client', () => ({
-  useUser() {
-    return {
-      user: {
-        sub: 'test-user-id',
-        email: 'test@example.com',
-        name: 'Test User',
-        picture: 'https://example.com/picture.jpg',
-      },
-      error: null,
-      isLoading: false,
-    };
-  },
-  UserProvider: ({ children }) => children,
+jest.mock('@auth0/nextjs-auth0', () => ({
+  getSession: jest.fn(() => null),
+  withPageAuthRequired: jest.fn((component) => component),
+  useUser: jest.fn(() => ({
+    user: null,
+    error: null,
+    isLoading: false,
+  })),
 }));
+
+// Mock React Query
+jest.mock('@tanstack/react-query', () => ({
+  useQuery: jest.fn(() => ({
+    data: null,
+    error: null,
+    isLoading: false,
+    isError: false,
+    refetch: jest.fn(),
+  })),
+  useMutation: jest.fn(() => ({
+    mutate: jest.fn(),
+    mutateAsync: jest.fn(),
+    isLoading: false,
+    isError: false,
+    error: null,
+    reset: jest.fn(),
+  })),
+  useQueryClient: jest.fn(() => ({
+    invalidateQueries: jest.fn(),
+    setQueryData: jest.fn(),
+    getQueryData: jest.fn(),
+  })),
+  QueryClient: jest.fn(),
+  QueryClientProvider: ({ children }) => children,
+}));
+
+// Mock environment variables
+process.env = {
+  ...process.env,
+  NEXT_PUBLIC_APP_URL: 'http://localhost:3000',
+  MONGODB_URI: 'mongodb://localhost:27017/test',
+};
+
+// Global beforeEach
+beforeEach(() => {
+  // Clear all mocks before each test
+  jest.clearAllMocks();
+});
+
+// Global afterEach
+afterEach(() => {
+  // Clean up after each test
+  jest.clearAllMocks();
+});
+
+// Global console overrides to reduce noise in tests
+const originalConsoleError = console.error;
+const originalConsoleWarn = console.warn;
+
+console.error = (...args) => {
+  // Filter out specific React errors that are expected in tests
+  if (
+    args[0]?.includes?.('Warning: ReactDOM.render is no longer supported') ||
+    args[0]?.includes?.('Warning: useLayoutEffect does nothing on the server')
+  ) {
+    return;
+  }
+  originalConsoleError(...args);
+};
+
+console.warn = (...args) => {
+  // Filter out specific warnings that are expected in tests
+  if (
+    args[0]?.includes?.('Warning: React does not recognize the') ||
+    args[0]?.includes?.('Warning: The tag <')
+  ) {
+    return;
+  }
+  originalConsoleWarn(...args);
+};
 
 // Mock next/headers
 jest.mock('next/headers', () => ({
@@ -100,11 +176,4 @@ global.ResizeObserver = class ResizeObserver {
   observe() { return null; }
   unobserve() { return null; }
   disconnect() { return null; }
-};
-
-// Suppress console errors in tests
-global.console = {
-  ...console,
-  error: jest.fn(),
-  warn: jest.fn(),
 }; 

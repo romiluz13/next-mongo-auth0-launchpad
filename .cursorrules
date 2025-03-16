@@ -1,868 +1,111 @@
-# AI Developer's Launch Pad: Next.js + MongoDB + Auth0 Template
-
-## Template Purpose
-This template is designed to be the perfect starting point for modern web applications:
-- 🚀 Production-ready architecture
-- 🔐 Enterprise-grade security with Auth0
-- 📊 Scalable data management with MongoDB
-- ⚡ Optimized performance with Next.js 14
-- 🎨 Beautiful UI with Tailwind CSS
-- 🧪 Comprehensive testing setup
-- 📱 Mobile-first responsive design
-
-## Quick Start (5 minutes)
-```bash
-# Clone the template
-git clone https://github.com/yourusername/next-mongo-auth0-template.git my-app
-
-# Navigate to project
-cd my-app
-
-# Run initialization script
-chmod +x scripts/init.sh
-./scripts/init.sh
-
-# Install dependencies
-npm install
-
-# Start development
-npm run dev
-```
-
-# AI Development Rules for Next.js + MongoDB + Auth0 Template
-
-## Template Initialization Rules
-1. Git History Cleanup:
-   - MUST reset Git history when starting your project:
-     ```bash
-     # Remove the old Git history
-     rm -rf .git
-     
-     # Initialize new Git repository
-     git init
-     
-     # Add all files
-     git add .
-     
-     # Create initial commit
-     git commit -m "Initial commit: Project setup from template"
-     
-     # Set your new remote (replace with your repository URL)
-     git remote add origin YOUR_NEW_REPOSITORY_URL
-     
-     # Push to your repository
-     git push -u origin main --force
-     ```
-   
-   - MUST update Git configuration:
-     ```bash
-     # Set your Git user information
-     git config user.name "Your Name"
-     git config user.email "your.email@example.com"
-     ```
-   
-   - MUST remove/update Git-related files:
-     - [ ] Update .gitignore for your specific needs
-     - [ ] Remove any template-specific GitHub workflows
-     - [ ] Update GitHub templates if present
-     - [ ] Remove template's LICENSE file and add your own
-     - [ ] Remove template's CONTRIBUTING.md if present
-     - [ ] Remove template's CHANGELOG.md if present
-     - [ ] Remove template's CODE_OF_CONDUCT.md if present
-
-   - MUST update repository information:
-     - [ ] Update package.json repository field
-     - [ ] Update any repository URLs in documentation
-     - [ ] Remove template's issue templates
-     - [ ] Remove template's pull request templates
-     - [ ] Remove template's GitHub Actions workflows
-
-2. Initial Cleanup:
-   - MUST remove all template-specific content from pages
-   - MUST remove example components not needed for your project
-   - MUST clean up unused API routes
-   - MUST update metadata and titles
-   - MUST remove template-specific styles
-   - MUST remove example tests not relevant to your project
-
-3. Content Cleanup Checklist:
-   - [ ] Update project name in package.json
-   - [ ] Update README.md with your project details
-   - [ ] Remove example dashboard components if not needed
-   - [ ] Remove example API routes if not needed
-   - [ ] Clean up src/app/page.tsx landing page
-   - [ ] Update src/app/layout.tsx metadata
-   - [ ] Remove example tests and write your own
-   - [ ] Update environment variables for your project
-   - [ ] Remove example models and create your own
-   - [ ] Clean up or remove example documentation
-
-4. File Structure Cleanup:
-   - MUST keep essential Auth0 and MongoDB setup
-   - MUST keep essential configuration files
-   - MUST remove example-specific routes:
-     - /dashboard/analytics
-     - /dashboard/team
-     - /dashboard/docs
-     - Any other example routes
-   - MUST remove example components:
-     - Example dashboard widgets
-     - Example data displays
-     - Example forms
-   - MUST keep essential utilities:
-     - Auth helpers
-     - Database connection
-     - Type definitions
-     - Test utilities
-
-5. Style Cleanup:
-   - MUST remove template-specific Tailwind classes
-   - MUST remove unused CSS variables
-   - MUST remove example color schemes
-   - MUST remove example animations
-   - MUST keep essential styling:
-     - Layout utilities
-     - Component base styles
-     - Theme configuration
-     - Dark mode support
-
-6. Configuration Updates:
-   - MUST update next.config.js for your needs
-   - MUST update tailwind.config.ts for your theme
-   - MUST update tsconfig.json if needed
-   - MUST update package.json:
-     - Project name
-     - Description
-     - Version
-     - Author
-     - Repository
-   - MUST update environment variables:
-     - Remove example values
-     - Add your own configurations
-     - Update .env.example
-
-7. Documentation Updates:
-   - MUST remove template documentation
-   - MUST create your own README
-   - MUST update API documentation
-   - MUST update deployment instructions
-   - MUST remove example Markdown files
-
-8. Testing Setup:
-   - MUST remove example tests
-   - MUST keep test utilities
-   - MUST update test configuration
-   - MUST create your own test structure
-
-9. Before Development:
-   - MUST verify Auth0 configuration
-   - MUST verify MongoDB connection
-   - MUST verify API routes work
-   - MUST verify test setup works
-   - MUST verify build process
-   - MUST verify deployment process
-
-## Critical Rules
-1. Runtime Restrictions:
-   - NEVER use Edge Runtime with Auth0
-   - NEVER add `export const runtime = "edge"` to Auth0 pages
-   - ALWAYS use Node.js runtime for Auth0 routes
-   - NEVER mix Edge and Node.js runtimes in the same route group
-
-2. Authentication Flow:
-   - ALWAYS handle token expiration
-   - ALWAYS implement proper logout cleanup
-   - NEVER store tokens in localStorage
-   - ALWAYS use secure session cookies
-   - ALWAYS implement proper error handling for auth failures
-
-3. Security Essentials:
-   - NEVER expose environment variables to the client
-   - ALWAYS validate user input
-   - ALWAYS sanitize database queries
-   - NEVER trust client-side data
-   - ALWAYS implement rate limiting
-   - ALWAYS use HTTPS in production
-
-## Component Architecture
-1. Client Components:
-   - MUST add 'use client' directive for:
-     - Components using hooks (useState, useEffect, etc.)
-     - Components using Auth0 hooks (useUser)
-     - Interactive components
-     - Event handlers
-     - Browser APIs
-     - Client-side routing
-   - MUST handle loading states
-   - MUST implement error boundaries
-   - MUST use proper TypeScript types
-   - MUST follow naming convention: [Name]Client.tsx
-
-2. Server Components:
-   - MUST NOT use client-side hooks
-   - MUST NOT use browser APIs
-   - MUST use async/await for data fetching
-   - MUST implement proper caching
-   - MUST handle streaming and suspense
-   - MUST follow naming convention: [Name]Server.tsx
-
-3. Layout Components:
-   - MUST be responsive
-   - MUST handle dark mode
-   - MUST be accessible (ARIA)
-   - MUST support mobile devices
-   - MUST handle dynamic content
-
-## Data Management
-1. MongoDB Integration:
-   - MUST use connection pooling
-   - MUST implement proper indexes
-   - MUST handle connection failures
-   - MUST validate schemas
-   - MUST use transactions for critical operations
-   - MUST implement proper error handling
-   - MUST use proper typing for models
-   - MUST handle MongoDB timeouts
-   - MUST implement proper query optimization
-   - MUST use proper projection
-
-2. State Management:
-   - MUST use SWR or React Query for data fetching
-   - MUST implement proper caching
-   - MUST handle stale data
-   - MUST implement optimistic updates
-   - MUST handle concurrent updates
-   - MUST implement proper error states
-   - MUST handle offline scenarios
-
-## Error Handling
-1. Client-side:
-   - MUST use error boundaries
-   - MUST handle network errors
-   - MUST handle auth errors
-   - MUST show user-friendly messages
-   - MUST implement retry logic
-   - MUST handle offline scenarios
-   - MUST log errors properly
-   - MUST handle rate limiting errors
-   - MUST handle validation errors
-   - MUST provide error recovery options
-
-2. Server-side:
-   - MUST use try/catch
-   - MUST return proper status codes
-   - MUST handle MongoDB errors
-   - MUST handle Auth0 errors
-   - MUST implement proper logging
-   - MUST sanitize error messages
-   - MUST handle timeout errors
-   - MUST handle validation errors
-   - MUST implement circuit breakers
-   - MUST handle cascading failures
-
-## Performance Optimization
-1. Data Fetching:
-   - MUST implement caching
-   - MUST use proper fetch strategies
-   - MUST handle pagination
-   - MUST implement infinite scrolling
-   - MUST optimize query patterns
-   - MUST use proper indexes
-   - MUST implement data prefetching
-   - MUST handle data revalidation
-   - MUST implement proper loading states
-   - MUST optimize bundle size
-
-2. Rendering:
-   - MUST use proper Next.js patterns
-   - MUST implement code splitting
-   - MUST optimize images
-   - MUST use proper lazy loading
-   - MUST minimize client-side JS
-   - MUST implement proper SSR
-   - MUST handle streaming
-   - MUST optimize fonts
-   - MUST implement proper caching
-   - MUST handle SEO requirements
-
-## Testing Requirements
-1. Unit Tests:
-   - MUST test all components
-   - MUST mock external dependencies
-   - MUST test error states
-   - MUST test loading states
-   - MUST test user interactions
-   - MUST achieve 80% coverage
-   - MUST test accessibility
-   - MUST test responsive behavior
-   - MUST test dark mode
-   - MUST test performance
-
-2. Integration Tests:
-   - MUST test auth flow
-   - MUST test API routes
-   - MUST test database operations
-   - MUST test error handling
-   - MUST test user flows
-   - MUST test concurrent operations
-   - MUST test rate limiting
-   - MUST test security features
-   - MUST test data validation
-   - MUST test performance
-
-## Deployment Rules
-1. Environment:
-   - MUST validate all env vars
-   - MUST use proper NODE_ENV
-   - MUST handle different environments
-   - MUST use proper logging
-   - MUST implement monitoring
-   - MUST handle SSL/TLS
-   - MUST implement proper backup
-   - MUST handle scaling
-   - MUST implement proper CI/CD
-   - MUST handle zero-downtime deploys
-
-2. Security:
-   - MUST implement CSP
-   - MUST handle CORS properly
-   - MUST implement rate limiting
-   - MUST use proper headers
-   - MUST handle XSS protection
-   - MUST implement CSRF protection
-   - MUST handle SQL injection
-   - MUST implement proper authentication
-   - MUST handle session management
-   - MUST implement proper logging
-
-## API Design
-1. REST Endpoints:
-   - MUST follow REST conventions
-   - MUST use proper HTTP methods
-   - MUST handle versioning
-   - MUST implement proper validation
-   - MUST use proper status codes
-   - MUST handle rate limiting
-   - MUST implement proper documentation
-   - MUST handle backwards compatibility
-   - MUST implement proper error responses
-   - MUST handle CORS properly
-
-2. Response Format:
-   - MUST use consistent format
-   - MUST include proper metadata
-   - MUST handle pagination
-   - MUST include proper error details
-   - MUST sanitize sensitive data
-   - MUST handle null values
-   - MUST use proper typing
-   - MUST handle large responses
-   - MUST implement proper caching
-   - MUST handle compression
-
-## Example Implementations
-
-### Protected API Route with Full Error Handling
-```typescript
-import { getSession } from '@auth0/nextjs-auth0';
-import { NextResponse } from 'next/server';
-import { z } from 'zod';
-import { rateLimit } from '@/lib/rate-limit';
-import { logger } from '@/lib/logger';
-
-const requestSchema = z.object({
-  // Define request schema
-});
-
-export async function POST(req: Request) {
-  try {
-    // Rate limiting
-    const limiter = await rateLimit(req);
-    if (!limiter.success) {
-      return NextResponse.json(
-        { error: 'Too many requests' },
-        { status: 429 }
-      );
-    }
-
-    // Auth check
-    const session = await getSession();
-    if (!session?.user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    // Input validation
-    const body = await req.json();
-    const result = requestSchema.safeParse(body);
-    if (!result.success) {
-      return NextResponse.json(
-        { error: 'Invalid input', details: result.error },
-        { status: 400 }
-      );
-    }
-
-    // Implementation
-    const data = await yourFunction(result.data);
-    
-    return NextResponse.json({ data });
-  } catch (error) {
-    logger.error('API error:', error);
-    return NextResponse.json(
-      { error: 'Internal Server Error' },
-      { status: 500 }
-    );
-  }
-}
-```
-
-### Protected Client Component with Full Features
-```typescript
-'use client';
-
-import { useUser } from '@auth0/nextjs-auth0/client';
-import { useQuery } from '@tanstack/react-query';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
-import { logger } from '@/lib/logger';
-
-export default function ProtectedPage() {
-  const { user, isLoading: authLoading, error: authError } = useUser();
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['data'],
-    queryFn: fetchData,
-    enabled: !!user,
-    retry: 3,
-    staleTime: 5 * 60 * 1000,
-  });
-
-  // Handle loading states
-  if (authLoading || isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  // Handle errors
-  if (authError) {
-    logger.error('Auth error:', authError);
-    return <AuthError error={authError} />;
-  }
-
-  if (error) {
-    logger.error('Data fetch error:', error);
-    return <DataError error={error} />;
-  }
-
-  return (
-    <ErrorBoundary fallback={<ErrorFallback />}>
-      <ProtectedRoute>
-        <div className="responsive-container dark:bg-gray-900">
-          <DataDisplay data={data} />
-        </div>
-      </ProtectedRoute>
-    </ErrorBoundary>
-  );
-}
-```
-
-### Data Fetching with Full Error Handling
-```typescript
-'use client';
-
-import useSWR from 'swr';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { logger } from '@/lib/logger';
-
-export function DataComponent() {
-  const [error, setError] = useState(null);
-  const { data, isLoading, mutate } = useSWR('/api/data', fetcher, {
-    onError: (err) => {
-      logger.error('Data fetch error:', err);
-      setError(err);
-      toast.error('Failed to load data');
-    },
-    revalidateOnFocus: false,
-    revalidateOnReconnect: true,
-    refreshInterval: 30000,
-  });
-
-  const handleRetry = async () => {
-    try {
-      await mutate();
-      setError(null);
-    } catch (err) {
-      logger.error('Retry failed:', err);
-      toast.error('Retry failed');
-    }
-  };
-
-  if (isLoading) return <LoadingState />;
-  if (error) return <ErrorState error={error} onRetry={handleRetry} />;
-
-  return (
-    <ErrorBoundary fallback={<ErrorFallback />}>
-      <DataDisplay data={data} />
-    </ErrorBoundary>
-  );
-}
-```
-
-# AI Developer's Launch Pad Development Rules
-
-## Project Structure Rules
-
-1. **Directory Organization**:
-   ```
-   src/
-   ├── app/                    # Next.js App Router pages
-   │   ├── api/               # API routes
-   │   │   ├── auth/         # Auth0 routes
-   │   │   ├── user/         # User management
-   │   │   ├── team/         # Team management
-   │   │   └── keys/         # API key management
-   │   ├── dashboard/        # Dashboard pages
-   │   └── (auth)/          # Auth-related routes
-   ├── components/
-   │   ├── ui/              # Reusable UI components
-   │   └── layout/          # Layout components
-   ├── lib/
-   │   ├── models/         # Mongoose models
-   │   └── utils/          # Helper functions
-   └── styles/             # Global styles
-   ```
-
-2. **File Naming**:
-   ```typescript
-   // ✓ CORRECT
-   src/components/ui/Button.tsx        // UI components: PascalCase
-   src/lib/utils/formatDate.ts         // Utilities: camelCase
-   src/lib/models/User.ts              // Models: PascalCase
-   src/app/api/auth/login/route.ts     // API routes: kebab-case directories
-
-   // ✗ INCORRECT
-   src/components/ui/button.tsx        // Wrong: lowercase
-   src/lib/utils/format_date.ts        // Wrong: snake_case
-   src/lib/models/user.model.ts        // Wrong: .model suffix
-   ```
-
-3. **Component Organization**:
-   ```typescript
-   // ✓ CORRECT: Client Component
-   'use client';
-   
-   import { useState } from 'react';
-   import { Button } from '@/components/ui/Button';
-   
-   export function UserProfile() {
-     const [isEditing, setIsEditing] = useState(false);
-     return (
-       <div className="space-y-4">
-         <h2 className="text-2xl font-bold">Profile</h2>
-         <Button onClick={() => setIsEditing(!isEditing)}>
-           {isEditing ? 'Save' : 'Edit'}
-         </Button>
-       </div>
-     );
-   }
-
-   // ✓ CORRECT: Server Component
-   import { headers } from 'next/headers';
-   import { UserProfile } from '@/components/UserProfile';
-   
-   export default async function ProfilePage() {
-     const data = await fetchUserData();
-     return <UserProfile initialData={data} />;
-   }
-   ```
-
-## Authentication Rules
-
-1. **Auth0 Integration**:
-   ```typescript
-   // ✓ CORRECT: Protected API Route
-   import { getSession } from '@auth0/nextjs-auth0';
-   
-   export async function GET() {
-     const session = await getSession();
-     if (!session?.user) {
-       return NextResponse.json(
-         { error: 'Unauthorized' },
-         { status: 401 }
-       );
-     }
-     // ... rest of the code
-   }
-
-   // ✓ CORRECT: Protected Component
-   'use client';
-   
-   import { useUser } from '@auth0/nextjs-auth0/client';
-   
-   export function ProtectedComponent() {
-     const { user, isLoading } = useUser();
-     
-     if (isLoading) return <LoadingSpinner />;
-     if (!user) return null;
-     
-     return <div>Protected Content</div>;
-   }
-   ```
-
-2. **Session Management**:
-   ```typescript
-   // ✓ CORRECT: Session Handling
-   import { withPageAuthRequired } from '@auth0/nextjs-auth0';
-   
-   export default withPageAuthRequired(async function Page() {
-     return <ProtectedContent />;
-   });
-   ```
-
-## Database Rules
-
-1. **MongoDB Models**:
-   ```typescript
-   // ✓ CORRECT: Mongoose Model
-   import mongoose from 'mongoose';
-   
-   const UserSchema = new mongoose.Schema({
-     auth0Id: {
-       type: String,
-       required: true,
-       unique: true,
-     },
-     email: {
-       type: String,
-       required: true,
-       unique: true,
-     },
-     name: String,
-     createdAt: {
-       type: Date,
-       default: Date.now,
-     },
-   }, {
-     timestamps: true,
-   });
-   
-   export const User = mongoose.models.User || 
-     mongoose.model('User', UserSchema);
-   ```
-
-2. **Database Operations**:
-   ```typescript
-   // ✓ CORRECT: Database Query
-   try {
-     await connectDB();
-     const user = await User.findOne({ email })
-       .select('-password')
-       .lean();
-     
-     if (!user) {
-       return NextResponse.json(
-         { error: 'User not found' },
-         { status: 404 }
-       );
-     }
-   } catch (error) {
-     console.error('Database error:', error);
-     return NextResponse.json(
-       { error: 'Database error' },
-       { status: 500 }
-     );
-   }
-   ```
-
-## API Design Rules
-
-1. **Route Structure**:
-   ```typescript
-   // ✓ CORRECT: API Route
-   export async function GET(
-     req: Request,
-     { params }: { params: { id: string } }
-   ) {
-     try {
-       // Validation
-       if (!params.id) {
-         return NextResponse.json(
-           { error: 'ID is required' },
-           { status: 400 }
-         );
-       }
-       
-       // Auth check
-       const session = await getSession();
-       if (!session?.user) {
-         return NextResponse.json(
-           { error: 'Unauthorized' },
-           { status: 401 }
-         );
-       }
-       
-       // Rate limiting
-       const limiter = await rateLimit(req);
-       if (!limiter.success) {
-         return NextResponse.json(
-           { error: 'Too many requests' },
-           { status: 429 }
-         );
-       }
-       
-       // Database operation
-       const data = await fetchData(params.id);
-       
-       return NextResponse.json(data);
-     } catch (error) {
-       console.error('API error:', error);
-       return NextResponse.json(
-         { error: 'Internal server error' },
-         { status: 500 }
-       );
-     }
-   }
-   ```
-
-## UI Component Rules
-
-1. **Component Structure**:
-   ```typescript
-   // ✓ CORRECT: UI Component
-   interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-     variant?: 'primary' | 'secondary' | 'danger';
-     size?: 'sm' | 'md' | 'lg';
-     isLoading?: boolean;
-   }
-   
-   export function Button({
-     variant = 'primary',
-     size = 'md',
-     isLoading,
-     children,
-     className,
-     ...props
-   }: ButtonProps) {
-     return (
-       <button
-         className={cn(
-           buttonVariants({ variant, size }),
-           className
-         )}
-         disabled={isLoading}
-         {...props}
-       >
-         {isLoading ? <LoadingSpinner /> : children}
-       </button>
-     );
-   }
-   ```
-
-## Testing Rules
-
-1. **Component Tests**:
-   ```typescript
-   // ✓ CORRECT: Component Test
-   import { render, screen } from '@testing-library/react';
-   import userEvent from '@testing-library/user-event';
-   
-   describe('Component', () => {
-     it('renders correctly', () => {
-       render(<Component />);
-       expect(screen.getByRole('button')).toBeInTheDocument();
-     });
-     
-     it('handles user interaction', async () => {
-       render(<Component />);
-       await userEvent.click(screen.getByRole('button'));
-       expect(screen.getByText('Clicked')).toBeInTheDocument();
-     });
-   });
-   ```
-
-## Error Handling Rules
-
-1. **Client-side Errors**:
-   ```typescript
-   // ✓ CORRECT: Error Handling
-   try {
-     const response = await fetch('/api/data');
-     if (!response.ok) {
-       throw new Error('Failed to fetch data');
-     }
-     const data = await response.json();
-   } catch (error) {
-     console.error('Error:', error);
-     toast.error('Failed to load data');
-   }
-   ```
-
-2. **Server-side Errors**:
-   ```typescript
-   // ✓ CORRECT: API Error Handling
-   try {
-     const session = await getSession();
-     if (!session?.user) {
-       return NextResponse.json(
-         { error: 'Unauthorized' },
-         { status: 401 }
-       );
-     }
-     
-     const data = await processRequest();
-     return NextResponse.json(data);
-   } catch (error) {
-     console.error('API error:', error);
-     return NextResponse.json(
-       { error: 'Internal server error' },
-       { status: 500 }
-     );
-   }
-   ```
-
-## Performance Rules
-
-1. **Data Fetching**:
-   ```typescript
-   // ✓ CORRECT: Optimized Data Fetching
-   const { data, error } = useSWR(
-     user ? `/api/data/${user.id}` : null,
-     fetcher,
-     {
-       revalidateOnFocus: false,
-       dedupingInterval: 60000,
-       errorRetryCount: 3,
-     }
-   );
-   ```
-
-2. **Component Optimization**:
-   ```typescript
-   // ✓ CORRECT: Memoized Component
-   const MemoizedComponent = memo(function Component({
-     data,
-     onAction,
-   }: Props) {
-     return (
-       <div>
-         {data.map((item) => (
-           <Item
-             key={item.id}
-             {...item}
-             onClick={() => onAction(item.id)}
-           />
-         ))}
-       </div>
-     );
-   });
-   ```
-
-Remember:
-- ALWAYS use TypeScript with proper types
-- ALWAYS handle loading and error states
-- ALWAYS protect sensitive routes
-- ALWAYS validate user input
-- NEVER expose sensitive information
-- NEVER skip error handling
-- NEVER trust client-side data
+# AI Developer's Launch Pad V2 - Development Plan
+
+## Project Overview
+This document outlines the development plan for transforming the AI Developer's Launch Pad into a MongoDB-branded, production-ready template for modern web applications.
+
+## Phase 0: Cleanup and Preparation
+- [ ] Analyze existing codebase thoroughly
+- [ ] Identify legacy files and components to be removed
+- [ ] Create a backup of the current state
+- [ ] Document dependencies and their purposes
+- [ ] **IMPORTANT**: Do not start actual development until explicit permission is given
+
+## Phase 1: Core Architecture Transformation
+- [ ] Implement feature-based folder organization
+- [ ] Separate business logic from UI components
+- [ ] Create clear boundaries between server and client components
+- [ ] Optimize MongoDB connection with proper pooling and error handling
+- [ ] Enhance Auth0 integration with better token management
+
+## Phase 2: MongoDB-Inspired Design System
+- [ ] Implement MongoDB's color palette (primary: #00ED64)
+- [ ] Create MongoDB-styled UI components using Shadcn UI
+- [ ] Design MongoDB Atlas dashboard-inspired layouts
+- [ ] Implement consistent dark mode based on MongoDB Cloud interface
+- [ ] Add subtle animations and transitions for better UX
+
+## Phase 3: Enhanced Data Management
+- [ ] Implement robust Mongoose models with validation
+- [ ] Create optimized API routes with proper error handling
+- [ ] Add data fetching layer with SWR or React Query
+- [ ] Implement MongoDB aggregation pipeline examples
+- [ ] Add proper indexing strategies for MongoDB collections
+
+## Phase 4: Authentication and Security
+- [ ] Enhance Auth0 integration with role-based access control
+- [ ] Create middleware for protected routes
+- [ ] Implement proper token refresh handling
+- [ ] Add session management utilities
+- [ ] Create comprehensive security headers
+
+## Phase 5: UI Implementation
+- [ ] Build MongoDB-inspired dashboard layout
+- [ ] Create reusable components with MongoDB styling
+- [ ] Implement responsive design for all viewport sizes
+- [ ] Add data visualization components
+- [ ] Implement form handling with React Hook Form
+
+## Phase 6: Testing and Documentation
+- [ ] Implement Jest/React Testing Library tests
+- [ ] Add end-to-end testing with Cypress
+- [ ] Create comprehensive component documentation
+- [ ] Document API endpoints and usage
+- [ ] Add example implementations and use cases
+
+## Phase 7: Optimization and Deployment
+- [ ] Optimize bundle sizes and performance
+- [ ] Implement proper error boundaries and fallbacks
+- [ ] Add analytics integration
+- [ ] Create CI/CD pipeline
+- [ ] Prepare deployment documentation
+
+## Development Rules
+
+### Code Structure
+- Use feature-based folder organization
+- Separate server and client components clearly
+- Follow naming conventions consistently
+- Keep components focused and single-purpose
+- Use TypeScript with strict typing
+
+### MongoDB Integration
+- Always use connection pooling
+- Implement proper error handling for database operations
+- Use Mongoose for data modeling
+- Add proper indexing for collections
+- Validate data before database operations
+
+### Authentication
+- Never use Edge Runtime with Auth0
+- Always handle token expiration
+- Implement proper logout cleanup
+- Use secure session cookies
+- Add proper error handling for auth failures
+
+### UI Components
+- Follow MongoDB design guidelines
+- Use Tailwind CSS for styling
+- Create responsive designs for all components
+- Implement proper loading states
+- Add error boundaries for component failures
+
+### State Management
+- Use React Query or SWR for server state
+- Implement Zustand or Jotai for client state
+- Keep state management simple and predictable
+- Avoid prop drilling with context where appropriate
+- Document state management patterns
+
+### Testing
+- Write tests for all components
+- Test error states and edge cases
+- Implement end-to-end tests for critical flows
+- Mock external dependencies in tests
+- Aim for high test coverage
+
+## Important Notes
+- Do not start actual development until explicit permission is given
+- Clean up legacy files only after confirmation
+- Document all major changes
+- Follow MongoDB branding guidelines
+- Prioritize performance and user experience

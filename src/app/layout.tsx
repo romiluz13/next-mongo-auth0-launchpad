@@ -1,14 +1,14 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { SessionProvider } from '@/components/session-provider';
-import { Nav } from '@/components/layout/Nav';
+import { UserProvider } from '@/features/auth';
+import { Nav, Footer } from '@/features/layout';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'AI Developer\'s Launch Pad',
-  description: 'Your launchpad for AI-powered development',
+  title: 'MongoDB Developer\'s Launch Pad',
+  description: 'Your launchpad for MongoDB-powered development',
   icons: {
     icon: '/favicon.ico',
   },
@@ -21,11 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={inter.className}>
-        <SessionProvider>
+      <body className={`${inter.className} bg-mongodb-dark text-white min-h-screen flex flex-col`}>
+        <UserProvider>
           <Nav />
-          {children}
-        </SessionProvider>
+          <div className="flex-grow pt-16">
+            {children}
+          </div>
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   );

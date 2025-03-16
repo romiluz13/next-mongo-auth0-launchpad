@@ -1,19 +1,21 @@
-# AI Developer's Launch Pad 🚀
+# MongoDB Developer's Launch Pad 🚀
 
-A cutting-edge, full-stack starter template built on Next.js, MongoDB, and Auth0 designed to get your ideas off the ground—fast.
+A production-ready, full-stack starter template built on Next.js, MongoDB, and Auth0 designed for modern web application development.
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)
 ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
 ![Auth0](https://img.shields.io/badge/Auth0-EB5424?style=for-the-badge&logo=auth0&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 ## Overview
 
-AI Developer's Launch Pad is your foundation for building modern web applications. It combines the power of Next.js 14's App Router, MongoDB's flexible document database, and Auth0's enterprise-grade authentication into a cohesive, production-ready template.
+MongoDB Developer's Launch Pad is the ultimate starting point for building modern, MongoDB-powered web applications. This template combines the power of Next.js 14's App Router, MongoDB's flexible document database, and Auth0's enterprise-grade authentication into a cohesive, production-ready solution with MongoDB-inspired design.
 
 ## ✨ Features
 
+### Current Features
 - 🎯 **Next.js 14 App Router** - Server components and modern routing
 - 🔐 **Auth0 Authentication** - Secure, scalable user management
 - 📚 **MongoDB + Mongoose** - Type-safe database operations
@@ -24,6 +26,30 @@ AI Developer's Launch Pad is your foundation for building modern web application
 - 🐳 **Docker Support** - Production-ready containerization
 - 📝 **TypeScript** - Full type safety
 - 🛠️ **Developer Tools** - ESLint, Prettier, Husky
+
+### Architecture
+- 🎯 **Feature-Based Organization** - Intuitive project structure for scalability
+- 🧩 **Clean Separation** - Business logic decoupled from UI components
+- 🔄 **Server/Client Boundaries** - Clear distinction between server and client code
+- 📱 **Responsive Design** - Optimized for all device sizes
+
+### MongoDB Integration
+- 🔌 **Optimized Connection** - Advanced connection pooling and error handling
+- 📊 **Robust Models** - Type-safe Mongoose models with validation
+- 🔍 **Indexing Strategies** - Performance-optimized database queries
+- 📈 **Aggregation Pipelines** - Ready-to-use MongoDB aggregation examples
+
+### Authentication & Security
+- 🔐 **Auth0 Integration** - Enterprise-grade authentication
+- 👥 **Role-Based Access** - Granular permission controls
+- 🔄 **Token Management** - Automatic token refresh handling
+- 🛡️ **Security Headers** - Comprehensive protection against common vulnerabilities
+
+### UI Components
+- 💎 **MongoDB Design System** - Components inspired by MongoDB Atlas
+- 🌓 **Dark Mode** - Consistent theme based on MongoDB Cloud
+- 📊 **Data Visualization** - Beautiful charts and dashboards
+- 📝 **Form Handling** - Integrated React Hook Form with validation
 
 ## 🚀 Quick Start
 
@@ -98,15 +124,18 @@ chmod +x scripts/cleanup.sh
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── api/               # API routes
-│   ├── dashboard/         # Dashboard pages
-│   └── (auth)/           # Auth-related pages
-├── components/            # React components
-│   ├── ui/               # Reusable UI components
-│   └── layout/           # Layout components
-├── lib/                  # Utilities and models
-│   ├── models/          # Mongoose models
-│   └── utils/           # Helper functions
-└── styles/              # Global styles
+│   │   ├── auth/         # Auth0 routes
+│   │   ├── user/         # User management
+│   │   └── keys/         # API key management
+│   ├── dashboard/        # Dashboard pages
+│   └── (auth)/          # Auth-related routes
+├── components/
+│   ├── ui/              # Reusable UI components
+│   └── layout/          # Layout components
+├── lib/
+│   ├── models/         # Mongoose models
+│   └── utils/          # Helper functions
+└── styles/             # Global styles
 ```
 
 ## 🔐 Key Features
@@ -130,6 +159,61 @@ src/
 - Dark mode support
 - Responsive design
 
+## 💻 MongoDB Integration
+
+### Connection Pooling
+```typescript
+// Optimized MongoDB connection with proper pooling
+import mongoose from 'mongoose';
+
+const MONGODB_URI = process.env.MONGODB_URI!;
+
+interface MongooseConnection {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+}
+
+let cached: MongooseConnection = global.mongoose || { conn: null, promise: null };
+
+if (!global.mongoose) {
+  global.mongoose = { conn: null, promise: null };
+}
+
+async function connectDB() {
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      family: 4
+    };
+
+    cached.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log('Connected to MongoDB');
+        return mongoose;
+      });
+  }
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+
+  return cached.conn;
+}
+
+export default connectDB;
+```
+
 ## 🧪 Development
 
 ```bash
@@ -152,10 +236,10 @@ npm run build
 
 ```bash
 # Build image
-docker build -t ai-devs-launchpad .
+docker build -t mongodb-developer-launchpad .
 
 # Run container
-docker run -p 3000:3000 ai-devs-launchpad
+docker run -p 3000:3000 mongodb-developer-launchpad
 ```
 
 ### Development with Docker Compose
@@ -225,10 +309,10 @@ docker-compose up
 2. **Docker Deployment**:
    ```bash
    # Build image
-   docker build -t ai-devs-launchpad .
+   docker build -t mongodb-developer-launchpad .
 
    # Run container
-   docker run -p 3000:3000 ai-devs-launchpad
+   docker run -p 3000:3000 mongodb-developer-launchpad
    ```
 
 3. **Environment Variables**:
@@ -248,11 +332,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [Next.js](https://nextjs.org/)
-- [MongoDB](https://www.mongodb.com/)
-- [Auth0](https://auth0.com/)
-- [Tailwind CSS](https://tailwindcss.com/)
+- MongoDB for the incredible database technology and design inspiration
+- Vercel for Next.js
+- Auth0 for authentication
+- The open source community for inspiration
 
 ---
 
-Built with ❤️ by [Rom Iluz](https://github.com/romiluz13)
+Built with ❤️ by [Rom Iluz](https://github.com/romiluz13) and the MongoDB Developer Experience Team
